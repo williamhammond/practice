@@ -1,3 +1,11 @@
+let rec is_unique_map l =
+  let tbl = Hashtbl.create (List.length l) in
+  match l with
+  | [] -> true
+  | h :: t ->
+      let x = Hashtbl.find tbl h in
+      if x != None then false else is_unique_map t
+
 let rec is_unique l =
   match l with
   | [] -> true
@@ -16,3 +24,6 @@ print_string (string_of_bool (is_unique [1; 2; 3; 4; 4]))
 
 ;;
 print_string (string_of_bool (is_str_unique "aabc"))
+
+;;
+print_string (string_of_bool (is_unique_map [1; 2; 3]))
