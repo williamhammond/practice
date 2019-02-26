@@ -1,10 +1,18 @@
-let rec is_unique_map l =
-  let tbl = Hashtbl.create (List.length l) in
-  match l with
-  | [] -> true
-  | h :: t ->
-      let x = Hashtbl.find tbl h in
-      if x != None then false else is_unique_map t
+(* let is_unique_map l =
+  let seen = Hashtbl.create (List.length l) in 
+  List.fold_left  *)
+
+
+let is_unique_map l = 
+  let rec helper l tbl = 
+    match l with
+    | [] -> true
+    | h :: t ->
+        if not (Hashtbl.mem tbl h) 
+        then Hashtbl.add tbl h 1; (helper t tbl); 
+        else false
+  in helper l (Hashtbl.create (List.length l))
+
 
 let rec is_unique l =
   match l with
@@ -26,4 +34,4 @@ print_string (string_of_bool (is_unique [1; 2; 3; 4; 4]))
 print_string (string_of_bool (is_str_unique "aabc"))
 
 ;;
-print_string (string_of_bool (is_unique_map [1; 2; 3]))
+print_string (string_of_bool (is_unique_map [1; 2; 3; 3]))
