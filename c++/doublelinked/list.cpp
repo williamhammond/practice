@@ -57,22 +57,28 @@ int AddItem(rec r) {
 int DeleteItem(char* delid) {
 	rec* curr = head;
 	rec* prev = NULL;
+	// Step over list until we find matching ID or run out
 	while (curr != NULL && strcmp(curr->id, delid) != 0) {
 		curr = curr->next;
 	}
+	// No node found with matching ID
 	if (curr == NULL) {
 		return 0;
 	}
+	// We're at the end of the list
 	if (curr->next==NULL) {
 		tail = curr->prev;
 		delete curr;
 		return 1;
 	}
+	// We're at the head of the list
 	if (curr->prev==NULL) {
 		head = curr-> next;
 		delete curr;
 		return 1;
 	}
+	// General case, we point the previous to the next, and the next 
+	// to the previous
 	curr->prev->next = curr->next;
 	curr->next->prev = curr->prev;
 	delete curr;
