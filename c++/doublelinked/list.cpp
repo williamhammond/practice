@@ -7,16 +7,15 @@ using namespace std;
 
 struct rec *head = NULL;
 
-bool checkDup(rec *a, rec *b) {
-	if (head != NULL && strcmp(a->id, b->id) == 0)
-	{
+bool checkDup(rec *n, rec* curr) {
+	if (curr == NULL) {
+		return false;
+	}
+	if (strcmp(n->id, curr->id) == 0) {
 		cout << "Duplicate ID found!" << endl;
 		return true;
 	}
-	else
-	{
-		return false;
-	}
+	checkDup(n, curr->next);
 }
 
 int AddItem(rec r) {
@@ -30,7 +29,10 @@ int AddItem(rec r) {
 		head = n;
 		return 1;
 	}
-	if (strcmp(head->lastname, n->lastname) > 0){
+	if (checkDup(n, head)) {
+		return 0;
+	}
+	if (strcmp(head->lastname, n->lastname) > 0) { // element goes in the head
 		n->next = head;
 		head->prev = n;
 		head = n;
