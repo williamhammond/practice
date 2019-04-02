@@ -55,30 +55,28 @@ int AddItem(rec r) {
 }
 
 int DeleteItem(char* delid) {
-	rec* tmp = head;
+	rec* curr = head;
 	rec* prev = NULL;
-	rec* nxt = NULL;
-
-	while (tmp != NULL && strcmp(tmp->id, delid) != 0) {
-		prev = tmp;
-		tmp = tmp->next;
+	while (curr != NULL && strcmp(curr->id, delid) != 0) {
+		curr = curr->next;
 	}
-	if (tmp == NULL) {
+	if (curr == NULL) {
 		return 0;
 	}
-	else if (prev == NULL) {
-		nxt = tmp->next;
-		head = nxt;
-		delete tmp;
+	if (curr->next==NULL) {
+		tail = curr->prev;
+		delete curr;
 		return 1;
 	}
-	else {
-		nxt = tmp->next;
-		prev->next = nxt;
-		delete tmp;
+	if (curr->prev==NULL) {
+		head = curr-> next;
+		delete curr;
 		return 1;
 	}
-	return 0;
+	curr->prev->next = curr->next;
+	curr->next->prev = curr->prev;
+	delete curr;
+	return 1;
 }
 
 void PrintNode(rec* n) {
