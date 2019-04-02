@@ -43,6 +43,7 @@ int AddItem(rec r) {
 	while(curr->next != NULL && strcmp(curr->next->lastname, n->lastname) < 0) { // curr goes before n
 		curr = curr->next;
 	}
+	curr->next->prev = n;
 	n->next = curr->next;
 	n->prev = curr;
 	curr->next = n;
