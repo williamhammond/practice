@@ -6,6 +6,7 @@
 using namespace std;
 
 struct rec *head = NULL;
+struct rec *tail = NULL;
 
 bool checkDup(rec *n, rec* curr) {
 	if (curr == NULL) {
@@ -27,6 +28,7 @@ int AddItem(rec r) {
 
 	if (head == NULL) {
 		head = n;
+		tail = n;
 		return 1;
 	}
 	if (checkDup(n, head)) {
@@ -43,8 +45,10 @@ int AddItem(rec r) {
 	while(curr->next != NULL && strcmp(curr->next->lastname, n->lastname) < 0) { // curr goes before n
 		curr = curr->next;
 	}
-	curr->next->prev = n;
 	n->next = curr->next;
+	if (n->next == NULL) {
+		tail = n;
+	}
 	n->prev = curr;
 	curr->next = n;
 	return 1;
