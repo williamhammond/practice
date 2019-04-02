@@ -81,19 +81,13 @@ int DeleteItem(char* delid) {
 	return 0;
 }
 
-void reverseList(rec *head)
-{
-	if (head == NULL) {
-		return;
-	}
-	reverseList(head->next);
-	cout << head->id << " ";
-	cout << head->firstname << " ";
-	cout << head->lastname << " ";
-	cout << head << " ";
-	cout << head->prev << " " ;
-	cout << head->next<< " " << endl;
-
+void PrintNode(rec* n) {
+	cout << n->id << " ";
+	cout << n->firstname << " ";
+	cout << n->lastname << " ";
+	cout << n << " ";
+	cout << n->prev << " " ;
+	cout << n->next<< " " << endl;
 }
 
 void PrintList(int order) {
@@ -103,12 +97,7 @@ void PrintList(int order) {
 		curr = head;
 		while (curr != NULL)
 		{
-			cout << curr->id << " ";
-			cout << curr->firstname << " ";
-			cout << curr->lastname << " ";
-			cout << curr << " ";
-			cout << curr->prev << " " ;
-			cout << curr->next<< " " << endl;
+			PrintNode(curr);
 			curr = curr->next;
 		}
 	}
@@ -117,12 +106,7 @@ void PrintList(int order) {
 		curr = tail;
 		while (curr != NULL)
 		{
-			cout << curr->id << " ";
-			cout << curr->firstname << " ";
-			cout << curr->lastname << " ";
-			cout << curr << " ";
-			cout << curr->prev << " " ;
-			cout << curr->next<< " " << endl;
+			PrintNode(curr);
 			curr = curr->prev;
 		}
 	}
