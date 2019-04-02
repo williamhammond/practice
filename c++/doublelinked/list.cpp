@@ -98,9 +98,9 @@ void reverseList(rec *head)
 
 void PrintList(int order) {
 	rec *curr = new rec;
-	curr = head;
 	if (order == 0)
 	{
+		curr = head;
 		while (curr != NULL)
 		{
 			cout << curr->id << " ";
@@ -114,7 +114,17 @@ void PrintList(int order) {
 	}
 	else if (order == 1)
 	{
-		reverseList(curr);
+		curr = tail;
+		while (curr != NULL)
+		{
+			cout << curr->id << " ";
+			cout << curr->firstname << " ";
+			cout << curr->lastname << " ";
+			cout << curr << " ";
+			cout << curr->prev << " " ;
+			cout << curr->next<< " " << endl;
+			curr = curr->prev;
+		}
 	}
 }
 
