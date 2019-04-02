@@ -108,3 +108,11 @@ void PrintList(int order) {
 		reverseList(curr);
 	}
 }
+
+int ReadData(char* keyFile, char* answerFile) {
+	return 0;
+}
+
+int WriteData(char* keyFile, char* answerFile) {
+	return 0;
+}

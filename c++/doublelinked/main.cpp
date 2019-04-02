@@ -8,6 +8,7 @@ using namespace std;
 
 int main() {
 	int input;
+	cout << "What would you like to do? 1 Add Item 2 Delete Item 3 Print List 4 Read From File 5 Write to File 0 Quit" << endl;
 	while (true)
 	{
 		cin >> input;
@@ -46,6 +47,14 @@ int main() {
 			cout << "Sort order: " << endl;
 			cin >> input;
 			PrintList(input);
+		}
+		else if (input == 4)    //    Read From File
+		{
+			cout << "Read from File" << endl;
+		}
+		else if (input == 5)    //    Wite to File
+		{
+			cout << "Write to File" << endl;
 		}
 		else if (input == 0)
 		{
