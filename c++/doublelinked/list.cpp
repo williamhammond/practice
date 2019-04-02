@@ -7,8 +7,8 @@ using namespace std;
 
 struct rec *head = NULL;
 
-bool checkDup(rec *curr) {
-	if (head != NULL && strcmp(head->id, curr->id) == 0)
+bool checkDup(rec *a, rec *b) {
+	if (head != NULL && strcmp(a->id, b->id) == 0)
 	{
 		cout << "Duplicate ID found!" << endl;
 		return true;
@@ -25,26 +25,26 @@ int AddItem(rec r) {
 	strcpy(n->id, r.id);
 	strcpy(n->firstname, r.firstname);
 	strcpy(n->lastname, r.lastname);
-	while (checkDup(n) == false)
-	{
-		if (head == NULL || strcmp(head->lastname, n->lastname) >= 0) {
-			n->next = head;
-			head = n;
-			return 1;
-		}
-		else {
-			rec* curr = head;
-			while (curr->next != NULL && strcmp(curr->next->lastname, n->lastname) < 0) {
-				curr = curr->next;
-			}
-			n->next = curr->next;
-			curr->next = n;
 
-			return 1;
-		}
-		return 0;
+	if (head == NULL) {
+		head = n;
+		return 1;
 	}
-	return 0;
+	if (strcmp(head->lastname, n->lastname) > 0){
+		n->next = head;
+		head->prev = n;
+		head = n;
+		return 1;
+	}
+
+	rec* curr = head;
+	while(curr->next != NULL && strcmp(curr->next->lastname, n->lastname) < 0) { // curr goes before n
+		curr = curr->next;
+	}
+	n->next = curr->next;
+	n->prev = curr;
+	curr->next = n;
+	return 1;
 }
 
 int DeleteItem(char* delid) {
@@ -84,7 +84,8 @@ void reverseList(rec *head)
 	cout << head->firstname << " ";
 	cout << head->lastname << " ";
 	cout << head << " ";
-	cout << head->next << " " << endl;
+	cout << head->prev << " " ;
+	cout << head->next<< " " << endl;
 
 }
 
@@ -99,7 +100,8 @@ void PrintList(int order) {
 			cout << curr->firstname << " ";
 			cout << curr->lastname << " ";
 			cout << curr << " ";
-			cout << curr->next << " " << endl;
+			cout << curr->prev << " " ;
+			cout << curr->next<< " " << endl;
 			curr = curr->next;
 		}
 	}
