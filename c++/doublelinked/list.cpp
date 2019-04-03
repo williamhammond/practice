@@ -65,15 +65,17 @@ int DeleteItem(char* delid) {
 	if (curr == NULL) {
 		return 0;
 	}
-	// We're at the end of the list
-	if (curr->next==NULL) {
-		tail = curr->prev;
-		delete curr;
-		return 1;
-	}
 	// We're at the head of the list
 	if (curr->prev==NULL) {
 		head = curr-> next;
+		head->prev = NULL;
+		delete curr;
+		return 1;
+	}
+	// We're at the end of the list
+	if (curr->next==NULL) {
+		tail = curr->prev;
+		tail->next = NULL;
 		delete curr;
 		return 1;
 	}
