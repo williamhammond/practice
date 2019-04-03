@@ -1,9 +1,12 @@
 #include <stddef.h>
 #include <iostream>
 #include <string.h>
+#include <fstream>
 #include "list.h"
 
 using namespace std;
+
+const int INT_MAX=2147483647;
 
 struct rec *head = NULL;
 struct rec *tail = NULL;
@@ -46,10 +49,12 @@ int AddItem(rec r) {
 		curr = curr->next;
 	}
 	n->next = curr->next;
+	n->prev = curr;
 	if (n->next == NULL) {
 		tail = n;
+	} else {
+		curr->next->prev = n;
 	}
-	n->prev = curr;
 	curr->next = n;
 	return 1;
 }
@@ -118,9 +123,88 @@ void PrintList(int order) {
 	}
 }
 
-int ReadData(char* keyFile, char* answerFile) {
-	return 0;
+void DeleteAll() {
+	if (head == NULL) {
+		return;	
+	}
+	rec* tmp = head;
+	head = tmp->next;
+	delete tmp;
+	DeleteAll();
+
+	head = NULL;
+	tail = NULL;
 }
+
+int ReadData(char *keyFile, char *answersFile) {
+	const int MAXCHARS = 31;
+	char keyId[MAXCHARS];
+	char answerId[MAXCHARS];
+	char ansBuffer[2048] = { '\0' };
+	char answers[10] = {'\0'};	//	should be int
+	char fName[MAXCHARS];
+	char lName[MAXCHARS];
+	int countCheck = 0;
+	int count = 0;
+
+	DeleteAll();
+
+	ifstream keyFileStream;
+	keyFileStream.open(keyFile, ios::in);
+
+	if (keyFileStream.fail())
+	{
+		cout << "Could not open file!" << endl;
+		return 0;
+	}
+
+	ifstream answerFileStream;
+	answerFileStream.open(answersFile, ios::in);
+
+	if (answerFileStream.fail())
+	{
+		cout << "Could not open file!" << endl;
+		return 0;
+	}
+
+	while (keyFileStream >> keyId >> fName >> lName)
+	{
+			while (answerFileStream >> answerId >> ws )
+			{
+				cout << "ID1 value: " << keyId << endl;
+				cout << "ID2 value: " << answerId << endl;
+				if (strcmp(keyId, answerId) == 0)
+				{
+					answerFileStream.getline(ansBuffer, 30);
+					
+					for (int i = 0; i < 40; i++)
+					{
+						cout << ansBuffer[i];
+					}
+					
+					rec newRec = {};
+					newRec.id = keyId;
+					strcpy(newRec.firstname, fName);
+					strcpy(newRec.lastname, lName);
+					cout << "success" << endl;
+					AddItem(newRec);
+					
+					break;
+
+				}
+				else
+				{
+					cout << "fail" << endl;
+					answerFileStream.ignore(INT_MAX, '\n');
+				}
+
+			}
+			answerFileStream.clear();	//	reset
+			answerFileStream.seekg(0, answerFileStream.beg);	//	reset
+	}
+	return 1;
+}
+
 
 int WriteData(char* keyFile, char* answerFile) {
 	return 0;

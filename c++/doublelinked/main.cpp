@@ -51,6 +51,13 @@ int main() {
 		else if (input == 4)    //    Read From File
 		{
 			cout << "Read from File" << endl;
+			char keyFile[256];
+			cout << "Input Key File Location: " << endl;
+			cin >> keyFile;
+			char answerFile[256];
+			cout << "Input Key File Location: " << endl;
+			cin >> answerFile;
+			ReadData(keyFile, answerFile);
 		}
 		else if (input == 5)    //    Wite to File
 		{
