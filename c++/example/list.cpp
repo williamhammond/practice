@@ -1,25 +1,27 @@
 #include <stddef.h>
 #include <iostream>
-#include <string.h>
 #include <fstream>
+#include <string.h>
 #include "list.h"
+
 
 using namespace std;
 
-const int INT_MAX=2147483647;
+const int INT_MAX = 10;
 
-struct rec *head = NULL;
-struct rec *tail = NULL;
+struct rec *head = NULL;	//	base of the node
+struct rec *tail = NULL;	//	tail that connects to next node
 
 bool checkDup(rec *n, rec* curr) {
-	if (curr == NULL) {
+	if (curr == NULL) {	//	node is empty?
 		return false;
 	}
-	if (strcmp(n->id, curr->id) == 0) {
+	//cout << curr->id; 
+	if (strcmp(n->id, curr->id) == 0) {	//	if node id's are the same
 		cout << "Duplicate ID found!" << endl;
 		return true;
 	}
-	checkDup(n, curr->next);
+	checkDup(n, curr->next);	//	check next node
 }
 
 int AddItem(rec r) {
@@ -28,6 +30,9 @@ int AddItem(rec r) {
 	strcpy(n->id, r.id);
 	strcpy(n->firstname, r.firstname);
 	strcpy(n->lastname, r.lastname);
+	for(int j = 0; j < 10; j++) {
+		n->answers[j] = r.answers[j];
+	}
 
 	if (head == NULL) {
 		head = n;
@@ -45,14 +50,15 @@ int AddItem(rec r) {
 	}
 
 	rec* curr = head;
-	while(curr->next != NULL && strcmp(curr->next->lastname, n->lastname) < 0) { // curr goes before n
+	while (curr->next != NULL && strcmp(curr->next->lastname, n->lastname) < 0) { // curr goes before n
 		curr = curr->next;
 	}
 	n->next = curr->next;
 	n->prev = curr;
 	if (n->next == NULL) {
 		tail = n;
-	} else {
+	}
+	else {
 		curr->next->prev = n;
 	}
 	curr->next = n;
@@ -71,14 +77,14 @@ int DeleteItem(char* delid) {
 		return 0;
 	}
 	// We're at the head of the list
-	if (curr->prev==NULL) {
-		head = curr-> next;
+	if (curr->prev == NULL) {
+		head = curr->next;
 		head->prev = NULL;
 		delete curr;
 		return 1;
 	}
 	// We're at the end of the list
-	if (curr->next==NULL) {
+	if (curr->next == NULL) {
 		tail = curr->prev;
 		tail->next = NULL;
 		delete curr;
@@ -96,10 +102,13 @@ void PrintNode(rec* n) {
 	cout << n->id << " ";
 	cout << n->firstname << " ";
 	cout << n->lastname << " ";
-	cout << n->answers<< " ";
+	for (int i=0; i < 10; i++) {
+		cout << n->answers[i] << " ";
+	}
+	cout << " ";
 	cout << n << " ";
-	cout << n->prev << " " ;
-	cout << n->next<< " " << endl;
+	cout << n->prev << " ";
+	cout << n->next << " " << endl;
 }
 
 void PrintList(int order) {
@@ -126,7 +135,7 @@ void PrintList(int order) {
 
 void DeleteAll() {
 	if (head == NULL) {
-		return;	
+		return;
 	}
 	rec* tmp = head;
 	head = tmp->next;
@@ -146,12 +155,13 @@ int ReadData(char *keyFile, char *answersFile) {
 	char lName[MAXCHARS];
 	int countCheck = 0;
 	int count = 0;
+	int v1, v2, v3, v4, v5, v6, v7, v8, v9, v10;
 
 	DeleteAll();
 
+
 	ifstream keyFileStream;
 	keyFileStream.open(keyFile, ios::in);
-
 	if (keyFileStream.fail())
 	{
 		cout << "Could not open file!" << endl;
@@ -160,7 +170,6 @@ int ReadData(char *keyFile, char *answersFile) {
 
 	ifstream answerFileStream;
 	answerFileStream.open(answersFile, ios::in);
-
 	if (answerFileStream.fail())
 	{
 		cout << "Could not open file!" << endl;
@@ -169,7 +178,7 @@ int ReadData(char *keyFile, char *answersFile) {
 
 	while (keyFileStream >> keyId >> fName >> lName)
 	{
-		while (answerFileStream >> answerId >> ws )
+		while (answerFileStream >> answerId >> ws >> v1 >> ws >> v2 >> ws >> v3 >> ws >> v4 >> ws >> v5 >> ws >> v6 >> ws >> v7 >> ws >> v8 >> ws >> v9 >> ws >> v10)
 		{
 			if (strcmp(keyId, answerId) == 0)
 			{
@@ -178,16 +187,18 @@ int ReadData(char *keyFile, char *answersFile) {
 				newRec.id = keyId;
 				strcpy(newRec.firstname, fName);
 				strcpy(newRec.lastname, lName);
-				int i = 0;
-				for (char x: ansBuffer) {
-					if (isdigit(x)) {
-						newRec.answers[i] = (int) x;
-						i++;
-					}
-				}
+				newRec.answers[0] = v1;
+				newRec.answers[1] = v2;
+				newRec.answers[2] = v3;
+				newRec.answers[3] = v4;
+				newRec.answers[4] = v5;
+				newRec.answers[5] = v6;
+				newRec.answers[6] = v7;
+				newRec.answers[7] = v8;
+				newRec.answers[8] = v9;
+				newRec.answers[9] = v10;
 				AddItem(newRec);
 				break;
-
 			}
 			answerFileStream.ignore(INT_MAX, '\n');
 		}
@@ -197,7 +208,35 @@ int ReadData(char *keyFile, char *answersFile) {
 	return 1;
 }
 
+int WriteData(char *keyFile, char *answersFile) {
+	rec *curr = head;
+	ofstream outFile;
+	outFile.open(keyFile, ios::in);
 
-int WriteData(char* keyFile, char* answerFile) {
+	ofstream outFile2;
+	outFile2.open(answersFile, ios::in);
+
+	if (outFile.fail())
+	{
+		cout << "Could not open file!" << endl;
+		return 0;
+	}
+	else if (outFile2.fail())
+	{
+		cout << "Could not open file!" << endl;
+		return 0;
+	}
+	else
+	{
+		while (curr != NULL)	//	key & answers files
+		{
+			outFile << curr->id << " " << curr->firstname << " " << curr->lastname << endl;
+			outFile2 << curr->id << " " << curr->answers << endl;	//	fix answers (a)
+			curr = curr->next;
+		}
+		outFile.close();
+		outFile2.close();
+	}
 	return 0;
 }
+

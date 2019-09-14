@@ -1,0 +1,2 @@
+Bound the array into three sizes, maintain different pointers to different stacks
+
